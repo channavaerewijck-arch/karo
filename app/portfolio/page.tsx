@@ -5,42 +5,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { projects, type Project } from "@/data/projects";
 
-// PAGE VARIANTS
-const pageVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: "easeOut" },
-  },
-};
-
-// GRID VARIANTS
-const gridVariants = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-// CARD VARIANTS
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.96 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.7,
-      delay: i * 0.04,
-      ease: "easeOut",
-    },
-  }),
-};
-
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
   const [hovered, setHovered] = useState(false);
@@ -65,11 +29,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
   return (
     <motion.div
-      custom={index}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="show"
+      initial={{ opacity: 0, y: 40, scale: 0.96 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-80px" }}
+      transition={{
+        duration: 0.7,
+        delay: index * 0.05,
+      }}
     >
       <Link href={`/portfolio/${project.slug}`}>
         <motion.div
@@ -79,7 +45,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={handleMouseLeave}
           whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          transition={{ duration: 0.3 }}
         >
           {/* Inner card */}
           <motion.div
@@ -87,7 +53,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             style={{
               rotateX: tilt.rotateX,
               rotateY: tilt.rotateY,
-              transformPerspective: 900,
+              perspective: 900,
             }}
           >
             {/* Glow background */}
@@ -103,7 +69,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 alt={project.title}
                 className="h-[220px] w-full object-cover md:h-[260px]"
                 whileHover={{ scale: 1.06 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                transition={{ duration: 0.6 }}
               />
 
               {/* Top-left label */}
@@ -116,7 +82,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: hovered ? 1 : 0 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
+                transition={{ duration: 0.25 }}
               >
                 <div className="absolute bottom-4 left-4 flex items-center gap-2 text-xs text-emerald-300">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -165,9 +131,9 @@ export default function PortfolioPage() {
   return (
     <motion.main
       className="min-h-screen bg-[#030308] text-slate-50"
-      variants={pageVariants}
-      initial="hidden"
-      animate="show"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
     >
       {/* Background orbs */}
       <div className="pointer-events-none fixed inset-0 z-0">
@@ -202,7 +168,7 @@ export default function PortfolioPage() {
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            transition={{ duration: 0.6 }}
           >
             <p className="text-[0.65rem] uppercase tracking-[0.35em] text-cyan-300/80">
               FUTURISTIC DIGITAL EXPERIENCES
@@ -217,7 +183,8 @@ export default function PortfolioPage() {
 
             <p className="mt-5 max-w-xl text-sm md:text-base text-slate-400">
               Een selectie van projecten waarin motion, strategy en minimal
-              design samenkomen.
+              design samenkomen. Dark, cinematic en gebouwd om vertrouwen en
+              conversie te verhogen.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-4 text-[0.7rem] text-slate-400">
@@ -227,7 +194,7 @@ export default function PortfolioPage() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                <span>Premium feel & performance</span>
+                <span>Focus op premium feel & performance</span>
               </div>
             </div>
           </motion.div>
@@ -236,7 +203,7 @@ export default function PortfolioPage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+            transition={{ duration: 0.7, delay: 0.1 }}
             className="relative"
           >
             <div className="pointer-events-none absolute -inset-6 rounded-[2.5rem] bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.16),_transparent_55%)] blur-2xl" />
@@ -245,22 +212,24 @@ export default function PortfolioPage() {
                 PROJECT SNAPSHOT
               </p>
               <p className="mt-3 text-sm text-slate-300">
-                Elke case is op maat ontworpen: geen templates, maar cinematic design met motion storytelling.
+                Elke case is op maat ontworpen: geen templates, maar een
+                combinatie van strak design, doordachte structuur en
+                motion-driven storytelling.
               </p>
 
               <div className="mt-5 grid grid-cols-2 gap-4 text-[0.7rem] text-slate-300">
                 <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-3">
                   <p className="text-[0.6rem] uppercase tracking-[0.18em] text-slate-500">
-                    Looptijd
+                    Gemiddelde looptijd
                   </p>
                   <p className="mt-1 text-sm text-cyan-300">7 dagen</p>
                 </div>
                 <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-3">
                   <p className="text-[0.6rem] uppercase tracking-[0.18em] text-slate-500">
-                    Types
+                    Type projecten
                   </p>
                   <p className="mt-1 text-sm text-emerald-300">
-                    SaaS · Studio&apos;s · Brands
+                    SaaS, Studio&apos;s, Brands
                   </p>
                 </div>
               </div>
@@ -280,12 +249,7 @@ export default function PortfolioPage() {
         <div className="mt-16 h-px w-full bg-gradient-to-r from-transparent via-slate-700/70 to-transparent" />
 
         {/* Projects grid */}
-        <motion.section
-          className="mt-16"
-          variants={gridVariants}
-          initial="hidden"
-          animate="show"
-        >
+        <section className="mt-16">
           <div className="mb-6 flex items-center justify-between gap-4">
             <p className="text-xs uppercase tracking-[0.25em] text-slate-500">
               Selected Projects
@@ -300,7 +264,7 @@ export default function PortfolioPage() {
               <ProjectCard key={project.slug} project={project} index={index} />
             ))}
           </div>
-        </motion.section>
+        </section>
       </div>
     </motion.main>
   );
