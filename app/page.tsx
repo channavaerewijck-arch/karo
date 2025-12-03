@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { projects } from "@/data/projects";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 24 },
@@ -26,6 +27,7 @@ export default function Home() {
       <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent" />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">
+
         {/* HEADER */}
         <header className="flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
@@ -39,7 +41,7 @@ export default function Home() {
           </div>
 
           <nav className="hidden items-center gap-8 text-sm text-slate-300 md:flex">
-            <a href="#work" className="hover:text-amber-300">Work</a>
+            <Link href="/portfolio" className="hover:text-amber-300">Work</Link>
             <a href="#process" className="hover:text-amber-300">Process</a>
             <a href="#offer" className="hover:text-amber-300">Offer</a>
             <a href="#contact" className="hover:text-amber-300">Contact</a>
@@ -86,9 +88,12 @@ export default function Home() {
               >
                 Start je 7-daagse build
               </Link>
-              <a href="#work" className="text-xs uppercase tracking-[0.25em] text-slate-300 hover:text-amber-200">
+              <Link
+                href="/portfolio"
+                className="text-xs uppercase tracking-[0.25em] text-slate-300 hover:text-amber-200"
+              >
                 Bekijk werk
-              </a>
+              </Link>
             </motion.div>
           </motion.div>
 
@@ -108,7 +113,6 @@ export default function Home() {
                 <span className="h-2 w-2 rounded-full bg-amber-500"></span>
                 <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
               </div>
-
               <div className="space-y-6">
                 <div className="h-40 rounded-xl bg-gradient-to-br from-amber-300/20 to-slate-800/50" />
                 <div className="grid grid-cols-3 gap-4">
@@ -185,22 +189,57 @@ export default function Home() {
           </div>
         </section>
 
-        {/* WORK */}
+        {/* FEATURED WORK — echte projecten */}
         <section id="work" className="mt-32">
-          <h2 className="text-sm uppercase tracking-[0.28em] text-amber-300">Selected Work</h2>
+          <h2 className="text-sm uppercase tracking-[0.28em] text-amber-300">Recent Work</h2>
+          <p className="mt-2 text-xl text-slate-100 max-w-xl">
+            Een selectie projecten uit mijn portfolio.
+          </p>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {[
-              ["Boutique Salon", "+42% meer boekingen"],
-              ["Advocatenkantoor", "+38% consultaanvragen"],
-              ["Renovatiebedrijf", "+54% offerte aanvragen"],
-            ].map(([label, result]) => (
-              <div key={label} className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
-                <div className="h-32 rounded-xl mb-4 bg-gradient-to-br from-amber-300/10 to-slate-800" />
-                <h3 className="text-sm text-slate-100">{label}</h3>
-                <p className="text-xs text-emerald-400 mt-1">{result}</p>
-              </div>
+          <div className="mt-10 grid gap-10 md:grid-cols-3">
+            {projects.slice(0, 3).map((project, i) => (
+              <motion.div
+                key={project.slug}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: i * 0.1,
+                  duration: 0.6,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <Link href={`/portfolio/${project.slug}`}>
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950 overflow-hidden group cursor-pointer">
+                    {/* IMAGE */}
+                    <div className="h-40 overflow-hidden">
+                      <motion.img
+                        src={project.cover}
+                        alt={project.title}
+                        className="object-cover w-full h-full group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)]"
+                      />
+                    </div>
+
+                    {/* TEXT */}
+                    <div className="p-4">
+                      <h3 className="text-sm font-semibold text-slate-100">
+                        {project.title}
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1">{project.subtitle}</p>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
+          </div>
+
+          <div className="mt-10">
+            <Link
+              href="/portfolio"
+              className="text-xs uppercase tracking-[0.25em] text-amber-300 hover:text-amber-200"
+            >
+              Bekijk alle projecten →
+            </Link>
           </div>
         </section>
 
